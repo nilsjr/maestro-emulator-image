@@ -21,10 +21,10 @@ RUN mkdir -p $ANDROID_HOME/platforms && \
 
 # Download Android SDK and accept licenses
 RUN curl -s -o "$ANDROID_SDK_CMD_TOOLS" "https://dl.google.com/android/repository/$ANDROID_SDK_CMD_TOOLS" \
-    && mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools" \
-    && unzip -q "$ANDROID_SDK_CMD_TOOLS" -d "$ANDROID_SDK_ROOT/cmdline-tools" \
+    && mkdir -p "$ANDROID_HOME/cmdline-tools" \
+    && unzip -q "$ANDROID_SDK_CMD_TOOLS" -d "$ANDROID_HOME/cmdline-tools" \
     && rm "$ANDROID_SDK_CMD_TOOLS" \
-    && mv "$ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools" "$ANDROID_SDK_ROOT/cmdline-tools/latest" \
+    && mv "$ANDROID_HOME/cmdline-tools/cmdline-tools" "$ANDROID_HOME/cmdline-tools/latest" \
     && yes | sdkmanager --licenses >/dev/null
 
 # Install Android build tools and platform tools
