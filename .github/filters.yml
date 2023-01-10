@@ -1,0 +1,6 @@
+base_image:
+  - android-base.Dockerfile
+  - publish-base-image.sh
+sdk_images:
+  - android-30.Dockerfile
+  - publish-sdk-image.sh

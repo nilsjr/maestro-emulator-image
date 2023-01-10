@@ -1,0 +1,48 @@
+name: Build and Publish Images
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish-base-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2.1.0
+        if: github.event_name == 'push'
+        id: filter
+        with:
+          filters: '.github/filters.yml'
+      - name: Docker login
+        if: ${{ github.event_name == 'schedule' || steps.filter.outputs.base_image == 'true' }}
+        run: echo "$DOCKER_TOKEN" | docker login --username=$DOCKER_USER --password-stdin
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+      - name: Build and publish android-base.Dockerfile
+        if: ${{ github.event_name == 'schedule' || steps.filter.outputs.base_image == 'true' }}
+        run: sh publish-base-image.sh
+
+  publish-sdk-image:
+    needs: publish-base-image
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2.1.0
+        if: github.event_name == 'push'
+        id: filter
+        with:
+          filters: '.github/filters.yml'
+      - name: Docker login
+        if: ${{ github.event_name == 'schedule' || steps.filter.outputs.base_image == 'true' || steps.filter.outputs.sdk_images == 'true' }}
+        run: echo "$DOCKER_TOKEN" | docker login --username=$DOCKER_USER --password-stdin
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+      - name: Build and publish android-30.Dockerfile
+        if: ${{ github.event_name == 'schedule' || steps.filter.outputs.base_image == 'true' || steps.filter.outputs.sdk_images == 'true' }}
+        run: sh publish-sdk-image.sh
