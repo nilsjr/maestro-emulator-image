@@ -11,19 +11,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: dorny/paths-filter@v2.1.0
+      - uses: dorny/paths-filter@v2
         if: github.event_name == 'push'
-        id: filter
+        id: changes
         with:
           filters: '.github/filters.yml'
       - name: Docker login
-        if: ${{ github.event_name == 'schedule' || steps.filter.outputs.base_image == 'true' }}
+        if: ${{ github.event_name == 'schedule' || steps.changes.outputs.base_image == 'true' }}
         run: echo "$DOCKER_TOKEN" | docker login --username=$DOCKER_USER --password-stdin
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
           DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
       - name: Build and publish android-base.Dockerfile
-        if: ${{ github.event_name == 'schedule' || steps.filter.outputs.base_image == 'true' }}
+        if: ${{ github.event_name == 'schedule' || steps.changes.outputs.base_image == 'true' }}
         run: sh publish-base-image.sh
 
   publish-sdk-image:
@@ -32,17 +32,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: dorny/paths-filter@v2.1.0
+      - uses: dorny/paths-filter@v2
         if: github.event_name == 'push'
-        id: filter
+        id: changes
         with:
           filters: '.github/filters.yml'
       - name: Docker login
-        if: ${{ github.event_name == 'schedule' || steps.filter.outputs.base_image == 'true' || steps.filter.outputs.sdk_images == 'true' }}
+        if: ${{ github.event_name == 'schedule' || steps.changes.outputs.base_image == 'true' || steps.changes.outputs.sdk_images == 'true' }}
         run: echo "$DOCKER_TOKEN" | docker login --username=$DOCKER_USER --password-stdin
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
           DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
       - name: Build and publish android-30.Dockerfile
-        if: ${{ github.event_name == 'schedule' || steps.filter.outputs.base_image == 'true' || steps.filter.outputs.sdk_images == 'true' }}
+        if: ${{ github.event_name == 'schedule' || steps.changes.outputs.base_image == 'true' || steps.changes.outputs.sdk_images == 'true' }}
         run: sh publish-sdk-image.sh
