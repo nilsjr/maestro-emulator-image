@@ -43,7 +43,7 @@ jobs:
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
           DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-      - name: Build and publish android-30.Dockerfile
+      - name: Build and publish android-sdk-30.Dockerfile
         if: ${{ github.event_name == 'schedule' || steps.changes.outputs.base_image == 'true' || steps.changes.outputs.sdk_images == 'true' }}
         run: sh publish-sdk-image.sh
 
