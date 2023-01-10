@@ -65,5 +65,5 @@ jobs:
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
           DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
       - name: Build and publish android-emulator-30.Dockerfile
-        if: ${{ github.event_name == 'schedule' || steps.filter.outputs.base_image == 'true' || steps.filter.outputs.sdk_images == 'true' || steps.filter.outputs.emulator_images == 'true' }}
+        if: ${{ github.event_name == 'schedule' || steps.changes.outputs.base_image == 'true' || steps.changes.outputs.sdk_images == 'true' || steps.changes.outputs.emulator_images == 'true' }}
         run: sh publish-emulator-image.sh
