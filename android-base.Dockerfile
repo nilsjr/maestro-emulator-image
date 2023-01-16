@@ -3,6 +3,20 @@ LABEL maintainer="Nils Druyen <nils.druyen@fressnapf.com>"
 
 ARG ANDROID_SDK_CMD_TOOLS="commandlinetools-linux-8512546_latest.zip"
 
+# Install packages
+RUN apt-get -qqy update && \
+    apt-get -qqy --no-install-recommends install software-properties-common && \
+    apt-get -qqy --no-install-recommends install \
+    curl \
+    zip \
+    unzip \
+    git \
+    locales \
+  && rm -rf /var/lib/apt/lists/*
+
+# Use unicode
+ENV LANG C.UTF-8
+
 # Set Environment Variables
 ENV ANDROID_HOME="/opt/android-sdk"
 ENV ANDROID_BUILD_TOOLS_VERSION=33.0.1
@@ -35,3 +49,5 @@ RUN sdkmanager --install "build-tools;$ANDROID_BUILD_TOOLS_VERSION" \
 # Install maestro
 RUN curl -Ls 'https://get.maestro.mobile.dev' | bash
 ENV PATH=$PATH:$HOME/.maestro/bin
+
+CMD ["bash"]

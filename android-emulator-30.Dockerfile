@@ -8,18 +8,12 @@ RUN apt-get -qqy update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN sdkmanager --list | grep system-images
-
 # Install system images
-#ENV ARCH=x86_64 \
-#    TARGET=google_apis \
-#    EMULATOR_API_LEVEL=30
+ENV ARCH=x86_64 \
+    TARGET=google_apis \
+    EMULATOR_API_LEVEL=30
 
 # API 30 system image
-#RUN sdkmanager --install "system-images;android-${EMULATOR_API_LEVEL};${TARGET};${ARCH}" \
-#    "platforms;android-${EMULATOR_API_LEVEL}" \
-#    "emulator"
-
-#sdkmanager --install "system-images;android-30;google_apis;${EMU_ARCH}"
-#sdkmanager --install "system-images;android-30;google_apis;x86_64"
-#sdkmanager --install "system-images;android-30;google_apis;arm64-v8a"
+RUN sdkmanager --install "system-images;android-${EMULATOR_API_LEVEL};${TARGET};${ARCH}" \
+    "platforms;android-${EMULATOR_API_LEVEL}" \
+    "emulator"
