@@ -2,8 +2,8 @@ base_image:
   - android-base.Dockerfile
   - publish-base-image.sh
 sdk_images:
-  - android-sdk-30.Dockerfile
+  - android-sdk.Dockerfile
   - publish-sdk-image.sh
 emulator_images:
-  - android-emulator-30.Dockerfile
+  - android-emulator.Dockerfile
   - publish-emulator-image.sh
