@@ -29,6 +29,9 @@ jobs:
   publish-sdk-image:
     needs: publish-base-image
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        api-level: [ 30, 33 ]
 
     steps:
       - uses: actions/checkout@v3
@@ -45,11 +48,14 @@ jobs:
           DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
       - name: Build and publish android-sdk-30.Dockerfile
         if: ${{ github.event_name == 'schedule' || steps.changes.outputs.base_image == 'true' || steps.changes.outputs.sdk_images == 'true' }}
-        run: sh publish-sdk-image.sh
+        run: sh publish-sdk-image.sh ${{ matrix.api-level }}
 
   publish-emulator-image:
     needs: publish-sdk-image
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        api-level: [ 30, 33 ]
 
     steps:
       - uses: actions/checkout@v3
@@ -66,4 +72,4 @@ jobs:
           DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
       - name: Build and publish android-emulator-30.Dockerfile
         if: ${{ github.event_name == 'schedule' || steps.changes.outputs.base_image == 'true' || steps.changes.outputs.sdk_images == 'true' || steps.changes.outputs.emulator_images == 'true' }}
-        run: sh publish-emulator-image.sh
+        run: sh publish-emulator-image.sh ${{ matrix.api-level }}

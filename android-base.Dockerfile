@@ -1,7 +1,7 @@
 FROM eclipse-temurin:17-jdk
 LABEL maintainer="Nils Druyen <nils.druyen@fressnapf.com>"
 
-ARG ANDROID_SDK_CMD_TOOLS="commandlinetools-linux-8512546_latest.zip"
+ARG ANDROID_SDK_CMD_TOOLS="commandlinetools-linux-11076708_latest.zip"
 
 # Install packages
 RUN apt-get -qqy update && \
@@ -18,10 +18,16 @@ RUN apt-get -qqy update && \
 ENV LANG C.UTF-8
 
 # Set Environment Variables
-ENV ANDROID_HOME="/opt/android-sdk"
-ENV ANDROID_BUILD_TOOLS_VERSION=33.0.1
+ENV ANDROID_HOME="/opt/android-sdk" \
+    ANDROID_BUILD_TOOLS_VERSION=33.0.2 \
+    ARCH=x86_64 \
+    TARGET=google_apis
+
 # Setup path environment variable
-ENV PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/build-tools/latest:$ANDROID_HOME/platform-tools
+ENV PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+ENV PATH=$PATH:$ANDROID_HOME/build-tools/latest
+ENV PATH=$PATH:$ANDROID_HOME/platform-tools
+
 ENV HOME /root
 
 # Download required packages
@@ -43,11 +49,8 @@ RUN curl -s -o "$ANDROID_SDK_CMD_TOOLS" "https://dl.google.com/android/repositor
 
 # Install Android build tools and platform tools
 RUN touch ~/.android/repositories.cfg
-RUN sdkmanager --install "build-tools;$ANDROID_BUILD_TOOLS_VERSION" \
-    "platform-tools"
 
-# Install maestro
-RUN curl -Ls 'https://get.maestro.mobile.dev' | bash
-ENV PATH=$PATH:$HOME/.maestro/bin
+RUN sdkmanager --install "build-tools;$ANDROID_BUILD_TOOLS_VERSION" \
+    platform-tools
 
 CMD ["bash"]
