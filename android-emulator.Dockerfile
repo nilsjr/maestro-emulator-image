@@ -17,5 +17,5 @@ ENV ARCH=x86_64 \
 
 # Install system image
 RUN sdkmanager --install "system-images;android-$API_LEVEL;$TARGET;$ARCH" \
-    "platforms;android-$API_LEVEL" \
-    emulator
+    "platforms;android-$API_LEVEL"
+RUN sdkmanager --install emulator

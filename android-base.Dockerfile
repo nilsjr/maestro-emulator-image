@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jdk
+FROM eclipse-temurin:17.0.10_7-jdk
 LABEL maintainer="Nils Druyen <nils.druyen@fressnapf.com>"
 
 ARG ANDROID_SDK_CMD_TOOLS="commandlinetools-linux-11076708_latest.zip"
