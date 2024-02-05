@@ -13,22 +13,31 @@ RUN apt-get -qqy update && \
     unzip \
     git \
     locales \
-  && rm -rf /var/lib/apt/lists/* \
+  && rm -rf /var/lib/apt/lists/*
 
 # Arguments
-ARG ANDROID_SDK_CMD_TOOLS="commandlinetools-linux-11076708_latest.zip"
 ARG API_LEVEL=33
-
-# Use unicode
-ENV LANG C.UTF-8
+ARG ANDROID_SDK_CMD_TOOLS="commandlinetools-linux-11076708_latest.zip"
 
 # Set Environment Variables
+# Use unicode
+ENV LANG C.UTF-8
 ENV ANDROID_HOME="/opt/android-sdk" \
     ANDROID_BUILD_TOOLS_VERSION=33.0.2 \
     ARCH=x86_64 \
     TARGET=google_apis
 
 ENV HOME /root
+
+# Setup path environment variable
+ENV PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+ENV PATH=$PATH:$ANDROID_HOME/build-tools/latest
+ENV PATH=$PATH:$ANDROID_HOME/platform-tools
+ENV PATH=$PATH:$ANDROID_HOME/emulator
+
+# Download required packages
+RUN apt-get update -q \
+    && apt-get install --no-install-recommends --no-upgrade -q -y curl unzip git openssh-client jq
 
 # Now we configure the user account under which we will be running the emulator
 RUN mkdir -p $ANDROID_HOME/platforms && \
@@ -47,16 +56,10 @@ RUN curl -s -o "$ANDROID_SDK_CMD_TOOLS" "https://dl.google.com/android/repositor
 RUN touch ~/.android/repositories.cfg
 
 RUN sdkmanager --install "build-tools;$ANDROID_BUILD_TOOLS_VERSION" \
-    "platform-tools" \
-    "system-images;android-$API_LEVEL;$TARGET;$ARCH" \
-    "platforms;android-$API_LEVEL" \
-    "emulator" \
-
-# Setup path environment variable
-ENV PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
-ENV PATH=$PATH:$ANDROID_HOME/build-tools/latest
-ENV PATH=$PATH:$ANDROID_HOME/platform-tools
-ENV PATH=$PATH:$ANDROID_HOME/emulator
+    "platform-tools"
+RUN sdkmanager --install "platforms;android-$API_LEVEL"
+RUN sdkmanager --install "system-images;android-$API_LEVEL;$TARGET;$ARCH" \
+    "emulator"
 
 #CMD ["bash"]
 
