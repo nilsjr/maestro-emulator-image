@@ -16,12 +16,12 @@ jobs:
         id: changes
         with:
           filters: '.github/filters.yml'
-      - name: Docker login
-        if: ${{ github.event_name == 'schedule' || steps.changes.outputs.base_image == 'true' }}
-        run: echo "$DOCKER_TOKEN" | docker login --username=$DOCKER_USER --password-stdin
-        env:
-          DOCKER_USER: ${{ secrets.DOCKER_USER }}
-          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+      - name: Login to Docker Hub
+        if: ${{ github.event_name == 'schedule' || steps.changes.outputs.base_image == 'true' || steps.changes.outputs.sdk_images == 'true' }}
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_TOKEN }}
       - name: Build and publish android-base.Dockerfile
         if: ${{ github.event_name == 'schedule' || steps.changes.outputs.base_image == 'true' }}
         run: sh publish-base-image.sh
@@ -40,12 +40,12 @@ jobs:
         id: changes
         with:
           filters: '.github/filters.yml'
-      - name: Docker login
+      - name: Login to Docker Hub
         if: ${{ github.event_name == 'schedule' || steps.changes.outputs.base_image == 'true' || steps.changes.outputs.sdk_images == 'true' }}
-        run: echo "$DOCKER_TOKEN" | docker login --username=$DOCKER_USER --password-stdin
-        env:
-          DOCKER_USER: ${{ secrets.DOCKER_USER }}
-          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_TOKEN }}
       - name: Build and publish android-sdk-30.Dockerfile
         if: ${{ github.event_name == 'schedule' || steps.changes.outputs.base_image == 'true' || steps.changes.outputs.sdk_images == 'true' }}
         run: sh publish-sdk-image.sh ${{ matrix.api-level }}
@@ -64,12 +64,35 @@ jobs:
         id: changes
         with:
           filters: '.github/filters.yml'
-      - name: Docker login
-        if: ${{ github.event_name == 'schedule' || steps.changes.outputs.base_image == 'true' || steps.changes.outputs.sdk_images == 'true' || steps.changes.outputs.emulator_images == 'true' }}
-        run: echo "$DOCKER_TOKEN" | docker login --username=$DOCKER_USER --password-stdin
-        env:
-          DOCKER_USER: ${{ secrets.DOCKER_USER }}
-          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+      - name: Login to Docker Hub
+        if: ${{ github.event_name == 'schedule' || steps.changes.outputs.base_image == 'true' || steps.changes.outputs.sdk_images == 'true' }}
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_TOKEN }}
       - name: Build and publish android-emulator-30.Dockerfile
         if: ${{ github.event_name == 'schedule' || steps.changes.outputs.base_image == 'true' || steps.changes.outputs.sdk_images == 'true' || steps.changes.outputs.emulator_images == 'true' }}
         run: sh publish-emulator-image.sh ${{ matrix.api-level }}
+
+  publish-emulator-v2-image:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        api-level: [ 33 ]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        if: github.event_name == 'push'
+        id: changes
+        with:
+          filters: '.github/filters.yml'
+      - name: Login to Docker Hub
+        if: ${{ github.event_name == 'schedule' || steps.changes.outputs.base_image == 'true' || steps.changes.outputs.sdk_images == 'true' }}
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+      - name: Build and publish android-emulator-v2.Dockerfile
+        if: ${{ github.event_name == 'schedule' || steps.changes.outputs.emulator_v2_images == 'true' }}
+        run: sh publish-emulator-v2-image.sh ${{ matrix.api-level }}

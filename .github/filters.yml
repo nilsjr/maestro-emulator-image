@@ -7,3 +7,6 @@ sdk_images:
 emulator_images:
   - android-emulator.Dockerfile
   - publish-emulator-image.sh
+emulator_v2_images:
+  - android-emulator-v2.Dockerfile
+  - publish-emulator-v2-image.sh
