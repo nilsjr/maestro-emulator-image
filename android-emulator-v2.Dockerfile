@@ -13,7 +13,7 @@ RUN apt-get -qqy update && \
     unzip \
     git \
     locales \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
 
 # Arguments
 ARG ANDROID_SDK_CMD_TOOLS="commandlinetools-linux-11076708_latest.zip"
@@ -47,7 +47,7 @@ RUN curl -s -o "$ANDROID_SDK_CMD_TOOLS" "https://dl.google.com/android/repositor
 RUN touch ~/.android/repositories.cfg
 
 RUN sdkmanager --install "build-tools;$ANDROID_BUILD_TOOLS_VERSION" \
-    platform-tools \
+    "platform-tools" \
     "system-images;android-$API_LEVEL;$TARGET;$ARCH" \
     "platforms;android-$API_LEVEL" \
     "emulator" \
