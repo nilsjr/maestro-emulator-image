@@ -19,7 +19,7 @@ ENV LANG C.UTF-8
 
 # Set Environment Variables
 ENV ANDROID_HOME="/opt/android-sdk" \
-    ANDROID_BUILD_TOOLS_VERSION=33.0.2 \
+    ANDROID_BUILD_TOOLS_VERSION=33.0.3 \
     ARCH=x86_64 \
     TARGET=google_apis
 
