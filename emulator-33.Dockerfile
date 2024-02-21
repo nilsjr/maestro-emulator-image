@@ -58,3 +58,4 @@ COPY scripts/install-sdk.sh /opt/
 RUN chmod +x /opt/install-sdk.sh
 RUN /opt/install-sdk.sh
 
+CMD [ "/bin/bash" ]

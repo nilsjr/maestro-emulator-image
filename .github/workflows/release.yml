@@ -22,6 +22,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
-      - name: Build and publish android-base.Dockerfile
+      - name: Build and publish emulator-33.Dockerfile
         if: ${{ steps.changes.outputs.emulator-image == 'true' }}
         run: sh publish-emulator-33-image.sh
