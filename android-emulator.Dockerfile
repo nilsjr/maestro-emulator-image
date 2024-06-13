@@ -6,7 +6,6 @@ ENV DEBIAN_FRONTEND noninteractive
 #=============================
 # Install Dependenices
 #=============================
-#SHELL ["/bin/bash", "-c"]
 
 RUN apt update && apt install -y curl \
 	sudo wget unzip bzip2 git libdrm-dev \
