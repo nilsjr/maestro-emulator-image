@@ -5,15 +5,7 @@ LABEL description="A Docker image to build and run android tests on emulator"
 LABEL version="0.0.1"
 
 # Install packages
-RUN apt-get -qqy update && \
-    apt-get -qqy --no-install-recommends install software-properties-common && \
-    apt-get -qqy --no-install-recommends install \
-    curl \
-    zip \
-    unzip \
-    git \
-    locales \
-  && rm -rf /var/lib/apt/lists/*
+RUN apk update && apk add curl zip unzip git openssh-client jq && rm -rf /var/lib/apt/lists/* && apk update
 
 # Arguments
 ARG API_LEVEL=34
@@ -34,10 +26,6 @@ ENV PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
 ENV PATH=$PATH:$ANDROID_HOME/build-tools/latest
 ENV PATH=$PATH:$ANDROID_HOME/platform-tools
 ENV PATH=$PATH:$ANDROID_HOME/emulator
-
-# Download required packages
-RUN apt-get update -q \
-    && apt-get install --no-install-recommends --no-upgrade -q -y curl unzip git openssh-client jq
 
 # Now we configure the user account under which we will be running the emulator
 RUN mkdir -p $ANDROID_HOME/platforms && \
