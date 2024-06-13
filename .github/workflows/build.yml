@@ -20,7 +20,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          file: ${{ matrix.gpu.file }}
+          file: android-emulator.Dockerfile
           tags: nilsjrfn/docker-android:api-34
           build-args: |
             API_LEVEL=34
