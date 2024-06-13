@@ -65,8 +65,8 @@ RUN sdkmanager --install "system-images;android-$API_LEVEL;$TARGET;$ARCH" \
 EXPOSE 5554 5555 5556
 
 # Copy the container scripts in the image.
-COPY ../scripts/start-emulator.sh /opt/
-COPY ../scripts/emulator-monitoring.sh /opt/
+COPY scripts/start-emulator.sh /opt/
+COPY scripts/emulator-monitoring.sh /opt/
 RUN chmod +x /opt/*.sh
 
 # Set the entrypoint

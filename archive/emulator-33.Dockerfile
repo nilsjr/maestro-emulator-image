@@ -54,7 +54,7 @@ EXPOSE 5554 5555
 RUN mkdir /root/.android/ && \
 	touch /root/.android/repositories.cfg
 
-COPY ../scripts/install-sdk.sh /opt/
+COPY install-sdk.sh /opt/
 RUN chmod +x /opt/install-sdk.sh
 RUN /opt/install-sdk.sh
 

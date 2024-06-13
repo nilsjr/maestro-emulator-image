@@ -16,5 +16,12 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
-      - name: Build and publish android-emulator.Dockerfile
-        run: sh publish-android-emulator-image.sh
+      - name: Build Docker image api-34
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          file: ${{ matrix.gpu.file }}
+          tags: nilsjrfn/docker-android:api-34
+          build-args: |
+            API_LEVEL=34
+            IMG_TYPE=google_apis
