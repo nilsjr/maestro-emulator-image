@@ -1,8 +1,10 @@
 FROM eclipse-temurin:21.0.2_13-jdk
 
 LABEL maintainer="Nils Druyen <nils.druyen@fressnapf.com>"
-LABEL description="A Docker image allowing to run an Android emulator"
+LABEL description="A Docker image to build and run android tests on emulator"
 LABEL version="0.0.1"
+
+ARG ANDROID_SDK_CMD_TOOLS="commandlinetools-linux-11076708_latest.zip"
 
 # Install packages
 RUN apt-get -qqy update && \
@@ -15,25 +17,21 @@ RUN apt-get -qqy update && \
     locales \
   && rm -rf /var/lib/apt/lists/*
 
-# Arguments
-ARG API_LEVEL=33
-ARG ANDROID_SDK_CMD_TOOLS="commandlinetools-linux-11076708_latest.zip"
-
-# Set Environment Variables
 # Use unicode
 ENV LANG C.UTF-8
+
+# Set Environment Variables
 ENV ANDROID_HOME="/opt/android-sdk" \
-    ANDROID_BUILD_TOOLS_VERSION=33.0.2 \
+    ANDROID_BUILD_TOOLS_VERSION=33.0.3 \
     ARCH=x86_64 \
     TARGET=google_apis
-
-ENV HOME /root
 
 # Setup path environment variable
 ENV PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
 ENV PATH=$PATH:$ANDROID_HOME/build-tools/latest
 ENV PATH=$PATH:$ANDROID_HOME/platform-tools
-ENV PATH=$PATH:$ANDROID_HOME/emulator
+
+ENV HOME /root
 
 # Download required packages
 RUN apt-get update -q \
@@ -56,18 +54,6 @@ RUN curl -s -o "$ANDROID_SDK_CMD_TOOLS" "https://dl.google.com/android/repositor
 RUN touch ~/.android/repositories.cfg
 
 RUN sdkmanager --install "build-tools;$ANDROID_BUILD_TOOLS_VERSION" \
-    "platform-tools"
-RUN sdkmanager --install "platforms;android-$API_LEVEL"
-RUN sdkmanager --install "system-images;android-$API_LEVEL;$TARGET;$ARCH" \
-    "emulator"
+    platform-tools
 
-# Open ADB port
-EXPOSE 5554 5555 5556
-
-# Copy the container scripts in the image.
-COPY scripts/start-emulator.sh /opt/
-COPY scripts/emulator-monitoring.sh /opt/
-RUN chmod +x /opt/*.sh
-
-# Set the entrypoint
-ENTRYPOINT ["/opt/start-emulator.sh"]
+CMD ["bash"]

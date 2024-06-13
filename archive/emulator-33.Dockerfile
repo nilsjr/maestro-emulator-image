@@ -1,8 +1,8 @@
-FROM eclipse-temurin:17.0.10_7-jdk
+FROM eclipse-temurin:21.0.2_13-jdk
 
 # Docker labels.
 LABEL maintainer="Nils Druyen <nils.druyen@fressnapf.com>"
-LABEL description="A Docker image allowing to run an Android emulator"
+LABEL description="A Docker image to build and run android tests on emulator"
 LABEL version="0.0.1"
 
 # Installing required packages.
@@ -54,7 +54,7 @@ EXPOSE 5554 5555
 RUN mkdir /root/.android/ && \
 	touch /root/.android/repositories.cfg
 
-COPY scripts/install-sdk.sh /opt/
+COPY ../scripts/install-sdk.sh /opt/
 RUN chmod +x /opt/install-sdk.sh
 RUN /opt/install-sdk.sh
 
