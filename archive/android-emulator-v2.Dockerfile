@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21.0.2_13-jdk
+FROM eclipse-temurin:21.0.3_9-jdk
 
 LABEL maintainer="Nils Druyen <nils.druyen@fressnapf.com>"
 LABEL description="A Docker image to build and run android tests on emulator"

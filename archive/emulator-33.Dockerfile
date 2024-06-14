@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21.0.2_13-jdk
+FROM eclipse-temurin:21.0.3_9-jdk
 
 # Docker labels.
 LABEL maintainer="Nils Druyen <nils.druyen@fressnapf.com>"
