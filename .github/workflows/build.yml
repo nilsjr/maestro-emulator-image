@@ -24,7 +24,7 @@ jobs:
         with:
           push: true
           file: android-emulator.Dockerfile
-          tags: nilsjrfn/docker-android:api-34
+          tags: nilsjrfn/docker-android:api-${{ matrix.api-level }}
           build-args: |
             API_LEVEL=${{ matrix.api-level }}
             IMG_TYPE=google_apis
@@ -47,7 +47,7 @@ jobs:
         with:
           push: true
           file: android-emulator-maestro.Dockerfile
-          tags: nilsjrfn/docker-android:api-34-maestro
+          tags: nilsjrfn/docker-android:api-${{ matrix.api-level }}-maestro
           build-args: |
             API_LEVEL=${{ matrix.api-level }}
             IMG_TYPE=google_apis
