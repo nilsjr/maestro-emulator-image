@@ -8,6 +8,9 @@ on:
 jobs:
   publish-android-image:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        api-level: [ 33, 34 ]
 
     steps:
       - uses: actions/checkout@v4
@@ -23,11 +26,14 @@ jobs:
           file: android-emulator.Dockerfile
           tags: nilsjrfn/docker-android:api-34
           build-args: |
-            API_LEVEL=34
+            API_LEVEL=${{ matrix.version }}
             IMG_TYPE=google_apis
 
   publish-maestro-image:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        api-level: [ 33, 34 ]
 
     steps:
       - uses: actions/checkout@v4
@@ -43,5 +49,5 @@ jobs:
           file: android-emulator-maestro.Dockerfile
           tags: nilsjrfn/docker-android:api-34-maestro
           build-args: |
-            API_LEVEL=34
+            API_LEVEL=${{ matrix.version }}
             IMG_TYPE=google_apis

@@ -70,13 +70,12 @@ emulator \
   -avd android \
   -gpu "$GPU_MODE" \
   -memory $OPT_MEMORY \
-  -no-boot-anim \
   -cores $OPT_CORES \
-  -ranchu \
   $AUTH_FLAG \
+  -no-boot-anim \
   -no-window \
-  -no-snapshot  || update_state "ANDROID_STOPPED"
-
+  -no-snapshot-save \
+  -wipe-data  || update_state "ANDROID_STOPPED"
 
   # -qemu \
   # -smp 8,sockets=1,cores=4,threads=2,maxcpus=8
