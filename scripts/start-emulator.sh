@@ -4,40 +4,12 @@ set -e
 
 source ./emulator-monitoring.sh
 
-# The emulator console port.
-EMULATOR_CONSOLE_PORT=5554
 # The ADB port used to connect to ADB.
-ADB_PORT=5555
+AVD_ID=PX34
 OPT_MEMORY=${MEMORY:-8192}
 OPT_CORES=${CORES:-4}
 OPT_SKIP_AUTH=${SKIP_AUTH:-true}
 AUTH_FLAG=
-# Start ADB server by listening on all interfaces.
-echo "Starting the ADB server ..."
-adb -a -P 5037 server nodaemon &
-
-# Detect ip and forward ADB ports from the container's network
-# interface to localhost.
-LOCAL_IP=$(ip addr list eth0 | grep "inet " | cut -d' ' -f6 | cut -d/ -f1)
-socat tcp-listen:"$EMULATOR_CONSOLE_PORT",bind="$LOCAL_IP",fork tcp:127.0.0.1:"$EMULATOR_CONSOLE_PORT" &
-socat tcp-listen:"$ADB_PORT",bind="$LOCAL_IP",fork tcp:127.0.0.1:"$ADB_PORT" &
-
-export USER=root
-
-# Creating the Android Virtual Emulator.
-TEST_AVD=$(avdmanager list avd | grep -c "android.avd" || true)
-if [ "$TEST_AVD" == "1" ]; then
-  echo "Use the exists Android Virtual Emulator ..."
-else
-  echo "Creating the Android Virtual Emulator ..."
-  echo "Using package '$PACKAGE_PATH', ABI '$ABI' and device '$DEVICE_ID' for creating the emulator"
-  echo no | avdmanager create avd \
-    --force \
-    --name android \
-    --abi "$ABI" \
-    --package "$PACKAGE_PATH" \
-    --device "$DEVICE_ID"
-fi
 
 if [ "$OPT_SKIP_AUTH" == "true" ]; then
   AUTH_FLAG="-skip-adb-auth"
@@ -67,7 +39,7 @@ echo "GPU           - $GPU_MODE"
 echo "MEMORY        - $OPT_MEMORY"
 echo "CORES         - $OPT_CORES"
 emulator \
-  -avd android \
+  -avd "$AVD_ID" \
   -gpu "$GPU_MODE" \
   -memory $OPT_MEMORY \
   -cores $OPT_CORES \

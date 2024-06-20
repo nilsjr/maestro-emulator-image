@@ -66,12 +66,17 @@ RUN mkdir /root/.android/ && \
 # Exporting ADB keys.
 COPY keys/* /root/.android/
 
-# The following layers will download the Android command-line tools
-# to install the Android SDK, emulator and system images.
-# It will then install the Android SDK and emulator.
+# Copy the container scripts in the image.
 COPY scripts/install-sdk.sh /opt/
-RUN chmod +x /opt/install-sdk.sh
+COPY scripts/create-emulator.sh /opt/
+COPY scripts/start-emulator.sh /opt/
+COPY scripts/emulator-monitoring.sh /opt/
+
+RUN chmod +x /opt/*.sh
 RUN /opt/install-sdk.sh
+RUN /opt/create-emulator.sh
+
+COPY avd/Pixel2.avd/config.ini /.android/avd/PX34.avd/
 
 # Download and install Maestro
 RUN mkdir -p /opt/maestro && \
@@ -79,11 +84,6 @@ wget -q -O /tmp/${MAESTRO_VERSION} "https://github.com/mobile-dev-inc/maestro/re
 unzip -q /tmp/${MAESTRO_VERSION} -d /opt/ && \
 rm /tmp/${MAESTRO_VERSION}
 ENV PATH=/opt/maestro/bin:${PATH}
-
-# Copy the container scripts in the image.
-COPY scripts/start-emulator.sh /opt/
-COPY scripts/emulator-monitoring.sh /opt/
-RUN chmod +x /opt/*.sh
 
 # Set the entrypoint
 ENTRYPOINT ["/opt/start-emulator.sh"]

@@ -1,3 +1,0 @@
-emulator-image:
-  - emulator-33.Dockerfile
-  - publish-emulator-33-image.sh
