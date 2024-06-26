@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        api-level: [ 33, 34 ]
+        api-level: [ 28, 30, 33, 34 ]
 
     steps:
       - uses: actions/checkout@v4
@@ -19,8 +19,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
-      - name: Build Docker image api-34
-        uses: docker/build-push-action@v5
+      - name: Build Docker image api-${{ matrix.api-level }}
+        uses: docker/build-push-action@v6
         with:
           push: true
           file: android-emulator.Dockerfile
@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        api-level: [ 33, 34 ]
+        api-level: [ 28, 30, 33, 34 ]
 
     steps:
       - uses: actions/checkout@v4
@@ -42,8 +42,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
-      - name: Build Docker image api-34
-        uses: docker/build-push-action@v5
+      - name: Build Docker image api-${{ matrix.api-level }} with maestro
+        uses: docker/build-push-action@v6
         with:
           push: true
           file: android-emulator-maestro.Dockerfile
