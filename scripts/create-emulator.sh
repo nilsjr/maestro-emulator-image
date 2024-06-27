@@ -8,7 +8,7 @@ source ./emulator-monitoring.sh
 EMULATOR_CONSOLE_PORT=5554
 # The ADB port used to connect to ADB.
 ADB_PORT=5555
-AVD_ID=${AVD_ID:Pixel2}
+AVD_ID=${AVD_ID:-Pixel2}
 
 # Start ADB server by listening on all interfaces.
 echo "Starting the ADB server ..."

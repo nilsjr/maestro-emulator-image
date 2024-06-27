@@ -5,7 +5,7 @@ set -e
 source ./emulator-monitoring.sh
 
 # The ADB port used to connect to ADB.
-AVD_ID=${AVD_ID:Pixel2}
+AVD_ID=${AVD_ID:-Pixel2}
 OPT_MEMORY=${MEMORY:-8192}
 OPT_PARTITION_SIZE=${PARTITION_SIZE:-8192}
 OPT_CORES=${CORES:-4}
