@@ -5,7 +5,7 @@ set -e
 source ./emulator-monitoring.sh
 
 # The ADB port used to connect to ADB.
-AVD_ID=PX34
+AVD_ID=${AVD_ID:Pixel2}
 OPT_MEMORY=${MEMORY:-8192}
 OPT_PARTITION_SIZE=${PARTITION_SIZE:-8192}
 OPT_CORES=${CORES:-4}
@@ -42,9 +42,7 @@ echo "CORES         - $OPT_CORES"
 emulator \
   -avd "$AVD_ID" \
   -gpu "$GPU_MODE" \
-  -memory $OPT_MEMORY \
   -cores $OPT_CORES \
-  -partition-size $OPT_PARTITION_SIZE \
   $AUTH_FLAG \
   -no-audio \
   -no-boot-anim \

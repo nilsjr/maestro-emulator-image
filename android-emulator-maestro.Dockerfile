@@ -28,6 +28,7 @@ ARG IMG_TYPE=google_apis
 ARG ARCHITECTURE=x86_64
 ARG CMD_LINE_VERSION=11076708_latest
 ARG DEVICE_ID=pixel
+ARG AVD_ID=Pixel2
 ARG GPU_ACCELERATED=false
 ARG MAESTRO_VERSION="1.36.0"
 
@@ -76,7 +77,7 @@ RUN chmod +x /opt/*.sh
 RUN /opt/install-sdk.sh
 RUN /opt/create-emulator.sh
 
-COPY avd/Pixel2.avd/config.ini /.android/avd/PX34.avd/
+COPY EmulatorConfig.ini /.android/avd/${AVD_ID}.avd/config.ini
 
 # Download and install Maestro
 RUN mkdir -p /opt/maestro && \
