@@ -1,3 +1,9 @@
+<blockquote>
+<b>⚠️&nbsp;&nbsp;Deprecation Notice for this repository</b><br><br>
+    
+<em>Switched to [Alpaquita android](https://github.com/G00fY2/alpaquita-android)</em>
+</blockquote>
+
 # Maestro emulator image
 Docker images for Android SDK, Emulators and preinstalled Maestro for fast & easy automated test.
 
